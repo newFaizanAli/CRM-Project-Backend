@@ -16,7 +16,7 @@ connectDB();
 // Middleware 
 
 // vercel
-const VERCEL_VITE = "https://crm-demo-frontend-zeta.vercel.app";
+const VERCEL_VITE = "https://crm-project-frontend-one.vercel.app";
 const VITE_URL= "http://localhost:5173"
 
 // CORS middleware FIRST
