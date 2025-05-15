@@ -5,12 +5,12 @@ const stockLedgerSchema = new mongoose.Schema(
   {
     product: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "product",
+      ref: "products",
       required: true,
     },
     warehouse: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "warehouse",
+      ref: "warehouses",
       required: true,
     },
     entryType: {
@@ -18,10 +18,14 @@ const stockLedgerSchema = new mongoose.Schema(
       enum: StockEntryTypes,
       required: true,
     },
-    entryRefId: { type: mongoose.Schema.Types.ObjectId }, 
+    entryRefId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "stockentry",
+      required: true,
+    },
     quantity: { type: Number, required: true },
-    direction: { type: String, enum: ["IN", "OUT"], required: true }, 
-    balance: { type: Number }, 
+    direction: { type: String, enum: ["IN", "OUT"], required: true },
+    balance: { type: Number },
     date: { type: Date, default: Date.now },
   },
   {
@@ -29,6 +33,4 @@ const stockLedgerSchema = new mongoose.Schema(
   }
 );
 
-
 module.exports = mongoose.model("stockledger", stockLedgerSchema);
-

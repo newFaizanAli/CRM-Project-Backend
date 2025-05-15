@@ -46,6 +46,7 @@ app.use('/api/categories', require('./routes/categories'));
 app.use('/api/products', require('./routes/products'));
 app.use('/api/warehouses', require('./routes/warehouses'));
 app.use('/api/stock-entry', require('./routes/stockentry'));
+app.use('/api/stock-ledger', require('./routes/stockledger'));
 
 
 

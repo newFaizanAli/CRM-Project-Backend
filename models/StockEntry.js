@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const stockEntrySchema = new mongoose.Schema(
   {
+    ID : {
+      type : String,
+      required: true,
+    },
     product: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "products",
