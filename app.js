@@ -48,6 +48,11 @@ app.use('/api/warehouses', require('./routes/warehouses'));
 app.use('/api/stock-entry', require('./routes/stockentry'));
 app.use('/api/stock-ledger', require('./routes/stockledger'));
 
+// buying
+app.use('/api/suppliers', require('./routes/suppliers'));
+app.use('/api/purchase-orders', require('./routes/purchase_order'));
+app.use('/api/purchase-receipts', require('./routes/purchase_receipt'));
+app.use('/api/purchase-invoices', require('./routes/purchase_invoice'));
 
 
 // Error handling middleware
