@@ -3,6 +3,7 @@ const router = express.Router();
 const { protect } = require("../middleware/auth");
 const PurchaseInvoices = require("../models/PurchaseInvoice");
 const { idCreator } = require("../lib/function");
+const handleStockEntry = require("../lib/handleStockEntery");
 
 router.get("/", protect, async (req, res) => {
   try {
@@ -12,8 +13,7 @@ router.get("/", protect, async (req, res) => {
       .populate({
         path: "supplier",
         select: "_id name",
-      })
-     
+      });
 
     res.json(purchase_invoices);
   } catch (error) {
@@ -36,7 +36,16 @@ router.post("/", protect, async (req, res) => {
       ID: invoice_id,
     });
 
-    await invoice.save();
+    const stock_entry = await handleStockEntry({
+      source: invoice,
+      userId: req.user.id,
+      type: "Purchase",
+      direction: "IN",
+    });
+
+    if (stock_entry) {
+      await invoice.save();
+    }
 
     const newInvoice = await PurchaseInvoices.findById(invoice._id)
       .populate({ path: "purchaseReceipt", select: "_id items ID totalAmount" })
@@ -44,8 +53,7 @@ router.post("/", protect, async (req, res) => {
       .populate({
         path: "supplier",
         select: "_id name",
-      })
-    
+      });
 
     res.status(201).json(newInvoice);
   } catch (error) {
@@ -61,9 +69,28 @@ router.put("/:id", protect, async (req, res) => {
     if (!invoice) {
       return res.status(404).json({ message: "Invoice not found" });
     }
+
+    if (invoice.stockEntered) {
+      return res
+        .status(403)
+        .json({ message: "Invoice already used for stock. Cannot update." });
+    }
+
     Object.assign(invoice, req.body);
     invoice.updatedAt = Date.now();
-    await invoice.save();
+
+    
+
+    const stock_entry = await handleStockEntry({
+      source: invoice,
+      userId: req.user.id,
+      type: "Purchase",
+      direction: "IN",
+    });
+
+    if (stock_entry) {
+      await invoice.save();
+    }
 
     const updatedInvoice = await PurchaseInvoices.findById(req.params.id)
       .populate({ path: "purchaseReceipt", select: "_id items ID totalAmount" })
@@ -71,8 +98,8 @@ router.put("/:id", protect, async (req, res) => {
       .populate({
         path: "supplier",
         select: "_id name",
-      })
-     
+      });
+
     res.json(updatedInvoice);
   } catch (error) {
     res.status(400).json({ message: error.message });

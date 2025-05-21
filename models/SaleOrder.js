@@ -1,13 +1,14 @@
 const mongoose = require("mongoose");
 
-const purchaseInvoiceSchema = new mongoose.Schema(
+const salesOrderSchema = new mongoose.Schema(
   {
     ID: {
       type: String,
+      required: true,
     },
-    purchaseReceipt: {
+    customer: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "purchase-receipt",
+      ref: "customers",
       required: true,
     },
     items: [
@@ -35,27 +36,32 @@ const purchaseInvoiceSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    supplier: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "suppliers",
-      required: true,
-    },
-    invoiceDate: {
+    orderDate: {
       type: Date,
       default: Date.now,
     },
-    dueDate: {
+    deliveryDate: {
       type: Date,
+    },
+    taxesAndCharges: {
+      type: Number,
+      default: 0,
+    },
+    discount: {
+      type: Number,
+      default: 0,
+    },
+    grandTotal: {
+      type: Number,
+      required: true,
     },
     status: {
       type: String,
-      enum: ["Unpaid", "Partially Paid", "Paid", "Cancelled"],
-      default: "Unpaid",
+      enum: ["Pending", "Partially Delivered", "Delivered", "Cancelled"],
+      default: "Pending",
     },
-    remarks: String,
-    stockEntered: {
-      type: Boolean,
-      default: false,
+    remarks: {
+      type: String,
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
@@ -65,4 +71,4 @@ const purchaseInvoiceSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("purchase-invoice", purchaseInvoiceSchema);
+module.exports = mongoose.model("sales-order", salesOrderSchema);

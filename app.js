@@ -33,7 +33,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/customers', require('./routes/customers'));
 app.use('/api/contacts', require('./routes/contacts'));
 app.use('/api/leads', require('./routes/leads'));
 app.use('/api/deals', require('./routes/deals'));
@@ -50,9 +49,16 @@ app.use('/api/stock-ledger', require('./routes/stockledger'));
 
 // buying
 app.use('/api/suppliers', require('./routes/suppliers'));
-app.use('/api/purchase-orders', require('./routes/purchase_order'));
+app.use('/api/purchase-orders', require('./routes/purchase_orders'));
 app.use('/api/purchase-receipts', require('./routes/purchase_receipt'));
 app.use('/api/purchase-invoices', require('./routes/purchase_invoice'));
+app.use('/api/purchase-returns', require('./routes/purchase_return'));
+
+
+// sales
+app.use('/api/customers', require('./routes/customers'));
+app.use('/api/sale-orders', require('./routes/sale_order'));
+
 
 
 // Error handling middleware

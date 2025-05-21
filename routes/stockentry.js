@@ -47,15 +47,10 @@ router.post("/", protect, async (req, res) => {
         });
       }
     }
-
-    const stock_entry_id = await idCreator({
-      model: StockEntry,
-      idStr: "STE",
-    });
-
+    
     const stock_entity = new StockEntry({
       ...req.body,
-      ID: stock_entry_id,
+      ID: `SE-${Date.now()}`,
     });
 
     await stock_entity.save();

@@ -1,49 +1,55 @@
-const mongoose = require('mongoose');  
+const mongoose = require("mongoose");
 
-const customerSchema = new mongoose.Schema({
+const customerSchema = new mongoose.Schema(
+  {
+    ID: {
+      type: String,
+    },
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
     },
     phone: {
-        type: String
+      type: String,
     },
     address: {
-        street: String,
-        city: String,
-        state: String,
-        zipCode: String,
-        country: String
+      type: String,
+    },
+    contactPerson: {
+      type: String,
+      trim: true,
     },
     company: {
-        type: String
+      type: String,
     },
     status: {
-        type: String,
-        enum: ['active', 'inactive', 'lead'],
-        default: 'active'
+      type: String,
+      enum: ["active", "inactive", "lead"],
+      default: "active",
+    },
+    type: {
+      type: String,
+      enum: ["Regular", "Walk-in", "Wholesale", "Retail"],
+      default: "Regular",
     },
     notes: {
-        type: String
+      type: String,
+    },
+    remarks: {
+      type: String,
     },
     createdBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now
-    }
-});
+  },
+  { timestamps: true }
+);
 
-module.exports = mongoose.model('Customer', customerSchema); 
+module.exports = mongoose.model("customers", customerSchema);
