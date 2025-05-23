@@ -61,6 +61,9 @@ app.use('/api/sale-orders', require('./routes/sale_order'));
 app.use('/api/sale-invoices', require('./routes/sale_invoice'));
 app.use('/api/sale-returns', require('./routes/sale_return'));
 
+// transactions
+
+app.use('/api/transactions', require('./routes/transactions'));
 
 
 // Error handling middleware

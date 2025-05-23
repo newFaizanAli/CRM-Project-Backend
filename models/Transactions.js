@@ -1,7 +1,10 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const transactionSchema = new mongoose.Schema(
   {
+    ID: {
+      type: String, 
+    },
     type: {
       type: String,
       enum: ["payment", "receipt"], // payment = supplier, receipt = customer
@@ -52,4 +55,6 @@ const transactionSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("transaction", transactionSchema);
+
+module.exports = mongoose.model("transaction", transactionSchema);
+ 
