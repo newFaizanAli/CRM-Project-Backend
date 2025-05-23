@@ -18,7 +18,7 @@ const stockEntrySchema = new mongoose.Schema(
     },
     entryType: {
       type: String,
-      enum: ["Opening Stock", "Purchase", "Adjustment", "Return", "Transfer"],
+      enum: ["Opening Stock", "Purchase", "Adjustment", "Return", "Transfer", "Sale"],
       required: true,
     },
     quantity: { type: Number, required: true },

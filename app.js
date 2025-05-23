@@ -58,6 +58,8 @@ app.use('/api/purchase-returns', require('./routes/purchase_return'));
 // sales
 app.use('/api/customers', require('./routes/customers'));
 app.use('/api/sale-orders', require('./routes/sale_order'));
+app.use('/api/sale-invoices', require('./routes/sale_invoice'));
+app.use('/api/sale-returns', require('./routes/sale_return'));
 
 
 
