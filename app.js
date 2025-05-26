@@ -37,7 +37,6 @@ app.use('/api/contacts', require('./routes/contacts'));
 app.use('/api/leads', require('./routes/leads'));
 app.use('/api/deals', require('./routes/deals'));
 app.use('/api/tasks', require('./routes/tasks'));
-app.use('/api/employees', require('./routes/employees'));
 app.use('/api/activities', require('./routes/activities'));
 
 // stock
@@ -64,6 +63,16 @@ app.use('/api/sale-returns', require('./routes/sale_return'));
 // transactions
 
 app.use('/api/transactions', require('./routes/transactions'));
+
+// hr
+
+app.use('/api/departments', require('./routes/departments'));
+app.use('/api/employees', require('./routes/employees'));
+
+
+// project
+
+app.use('/api/projects', require('./routes/projects'));
 
 
 // Error handling middleware

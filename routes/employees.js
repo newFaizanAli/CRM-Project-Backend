@@ -8,7 +8,10 @@ const { idCreator } = require("../lib/function");
 // Get all employees
 router.get("/", protect, async (req, res) => {
   try {
-    const employees = await Employee.find();
+    const employees = await Employee.find().populate({
+      path: "department",
+      select: "_id ID name",
+    });
     res.json(employees);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -22,14 +25,20 @@ router.post("/", protect, async (req, res) => {
       model: Employee,
       idStr: "EMP",
     });
-    
+
     const employee = new Employee({
       ...req.body,
       createdBy: req.user.id,
       ID: emp_id,
     });
 
-    const newEmployee = await employee.save();
+    await employee.save();
+
+    const newEmployee = await Employee.findById(employee._id).populate({
+      path: "department",
+      select: "_id ID name",
+    });
+
     res.status(201).json(newEmployee);
   } catch (error) {
     console.log(error.message);
@@ -46,7 +55,13 @@ router.put("/:id", protect, async (req, res) => {
     }
     Object.assign(employee, req.body);
     employee.updatedAt = Date.now();
-    const updatedEmployee = await employee.save();
+    await employee.save();
+
+    const updatedEmployee = await Employee.findById(req.params.id).populate({
+      path: "department",
+      select: "_id ID name",
+    });
+
     res.json(updatedEmployee);
   } catch (error) {
     res.status(400).json({ message: error.message });

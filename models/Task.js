@@ -26,6 +26,12 @@ const taskSchema = new mongoose.Schema({
   },
   assignedTo: {
     type: String,
+    ref: "employees",
+    require: true
+  },
+  project: {
+    type: String,
+    ref: "projects",
     require: true
   },
   createdBy: {

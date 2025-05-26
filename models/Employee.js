@@ -18,8 +18,9 @@ const employeeSchema = new mongoose.Schema({
     require: true,
   },
   department: {
-    type: String,
-    require: true,
+     type: mongoose.Schema.Types.ObjectId,
+       ref: "departments",
+   default: null,
   },
   position: {
     type: String,
@@ -33,6 +34,9 @@ const employeeSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+  types: {
+    type: String
   },
   updatedAt: {
     type: Date,

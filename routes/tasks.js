@@ -6,7 +6,10 @@ const Task = require("../models/Task");
 // Get all tasks
 router.get("/", protect, async (req, res) => {
   try {
-    const tasks = await Task.find();
+    const tasks = await Task.find()
+      .populate({ path: "project", select: "_id ID name" })
+      .populate({ path: "assignedTo", select: "_id ID name" });
+
     res.json(tasks);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -21,7 +24,12 @@ router.post("/", protect, async (req, res) => {
       createdBy: req.user.id,
     });
 
-    const newTask = await task.save();
+    task.save();
+
+    const newTask = await Task.findById(task._id)
+      .populate({ path: "project", select: "_id ID name" })
+      .populate({ path: "assignedTo", select: "_id ID name" });
+
     res.status(201).json(newTask);
   } catch (error) {
     console.log(error.message);
@@ -39,7 +47,12 @@ router.put("/:id", protect, async (req, res) => {
 
     Object.assign(task, req.body);
     task.updatedAt = Date.now();
-    const updatedTask = await task.save();
+    await task.save();
+
+    const updatedTask = await Task.findById(req.params.id)
+      .populate({ path: "project", select: "_id ID name" })
+      .populate({ path: "assignedTo", select: "_id ID name" });
+
     res.json(updatedTask);
   } catch (error) {
     res.status(400).json({ message: error.message });
