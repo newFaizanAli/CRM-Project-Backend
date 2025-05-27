@@ -2,12 +2,17 @@ const express = require("express");
 const router = express.Router();
 const { protect } = require("../middleware/auth");
 const Contact = require("../models/Contact");
-const { createActivity } = require("../lib/function");
 
 // Get all contacts
 router.get("/", protect, async (req, res) => {
   try {
-    const contacts = await Contact.find();
+    const contacts = await Contact.find()
+      .populate({
+        path: "company",
+        select: "_id ID name",
+      })
+      .populate("person", "ID name _id email phone");
+
     res.json(contacts);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -22,17 +27,11 @@ router.post("/", protect, async (req, res) => {
       createdBy: req.user.id,
     });
 
-    const newContact = await contact.save();
+    await contact.save();
 
-    // activity
-    await createActivity({
-      createdBy: req.user.id,
-      action: "Created",
-      userName: req.user.name,
-      task: "Contact",               
-      taskname: newContact.name,   
-    });
-
+    const newContact = await Contact.findById(contact._id)
+      .populate({ path: "company", select: "_id ID name" })
+      .populate("person", "ID name _id email phone");
 
     res.status(201).json(newContact);
   } catch (error) {
@@ -51,16 +50,11 @@ router.put("/:id", protect, async (req, res) => {
 
     Object.assign(contact, req.body);
     contact.updatedAt = Date.now();
-    const updatedContact = await contact.save();
+    await contact.save();
 
-     // activity
-     await createActivity({
-      createdBy: req.user.id,
-      action: "Updated",
-      userName: req.user.name,
-      task: "Contact",               
-      taskname: req?.body?.name,   
-    });
+    const updatedContact = await Contact.findById(req.params.id)
+      .populate({ path: "company", select: "_id ID name" })
+      .populate("person", "ID name _id email phone");
 
     res.json(updatedContact);
   } catch (error) {
@@ -77,16 +71,7 @@ router.delete("/:id", protect, async (req, res) => {
       return res.status(404).json({ message: "Contact not found" });
     }
 
-    // activity
-    await createActivity({
-      createdBy: req.user.id,
-      action: "Deleted",
-      userName: req.user.name,
-      task: "Contact",               
-      taskname: contact?.name,   
-    });
-
-    await contact.deleteOne(); 
+    await contact.deleteOne();
 
     res.json({ message: "Contact deleted" });
   } catch (error) {

@@ -26,6 +26,9 @@ const employeeSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  phone: {
+    type: String,
+  },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

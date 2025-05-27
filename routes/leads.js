@@ -6,7 +6,11 @@ const Lead = require("../models/Lead");
 // Get all leads
 router.get("/", protect, async (req, res) => {
   try {
-    const leads = await Lead.find();
+    const leads = await Lead.find().populate({
+      path: "company",
+      select: "_id ID name",
+    });
+
     res.json(leads);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -21,9 +25,12 @@ router.post("/", protect, async (req, res) => {
       createdBy: req.user.id,
     });
 
-    const newLead = await lead.save();
+    await lead.save();
 
-    
+    const newLead = await Lead.find().populate({
+      path: "company",
+      select: "_id ID name",
+    });
 
     res.status(201).json(newLead);
   } catch (error) {
@@ -42,7 +49,13 @@ router.put("/:id", protect, async (req, res) => {
 
     Object.assign(lead, req.body);
     lead.updatedAt = Date.now();
-    const updatedLead = await lead.save();
+    await lead.save();
+
+    const updatedLead = await Lead.find().populate({
+      path: "company",
+      select: "_id ID name",
+    });
+
     res.json(updatedLead);
   } catch (error) {
     res.status(400).json({ message: error.message });

@@ -6,7 +6,12 @@ const Deal = require("../models/Deal");
 // Get all deals
 router.get("/", protect, async (req, res) => {
   try {
-    const deals = await Deal.find();
+    const deals = await Deal.find().populate({
+      path: "company",
+      select: "_id ID name",
+    });
+
+   
     res.json(deals);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -21,7 +26,13 @@ router.post("/", protect, async (req, res) => {
       createdBy: req.user.id,
     });
 
-    const newDeal = await deal.save();
+    await deal.save();
+
+     const newDeal = await Deal.find().populate({
+      path: "company",
+      select: "_id ID name",
+    });
+
     res.status(201).json(newDeal);
   } catch (error) {
     console.log(error.message);
@@ -39,7 +50,13 @@ router.put("/:id", protect, async (req, res) => {
 
     Object.assign(deal, req.body);
     deal.updatedAt = Date.now();
-    const updatedDeal = await deal.save();
+    await deal.save();
+
+    const updatedDeal = await Deal.find().populate({
+      path: "company",
+      select: "_id ID name",
+    });
+    
     res.json(updatedDeal);
   } catch (error) {
     res.status(400).json({ message: error.message });

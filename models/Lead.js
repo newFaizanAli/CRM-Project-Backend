@@ -19,7 +19,9 @@ const leadSchema = new mongoose.Schema({
     default: "other",
   },
   company: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "companies",
+    defualt: "none",
   },
   value: {
     type: Number,

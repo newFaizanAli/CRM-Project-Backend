@@ -1,39 +1,34 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const contactSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true
+const contactSchema = new mongoose.Schema(
+  {
+    personType: {
+      type: String,
+      enum: ["customers", "suppliers", "employees"],
+      required: true,
     },
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    phone: {
-        type: String
+    person: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      refPath: "personType",
     },
     company: {
-        type: String
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "companies",
+      default: null,
     },
     status: {
-        type: String,
-        enum: ['active', 'inactive'],
-        default: 'active'
+      type: String,
+      enum: ["active", "inactive"],
+      default: "active",
     },
     createdBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now
-    }
-});
+  },
+  { timestamps: true }
+);
 
-module.exports = mongoose.model('contacts', contactSchema); 
+module.exports = mongoose.model("contacts", contactSchema);
