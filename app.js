@@ -71,11 +71,19 @@ app.use("/api/employees", require("./routes/employees"));
 app.use("/api/companies", require("./routes/companies"));
 app.use("/api/contacts", require("./routes/contacts"));
 
+app.use("/api/attendances", require("./routes/hr/attendance"));
+app.use("/api/leaves", require("./routes/hr/leaves"));
+
 
 // project
 
 app.use("/api/projects", require("./routes/projects"));
 app.use("/api/tasks", require("./routes/tasks"));
+
+// payroll
+
+app.use("/api/salary-components", require("./routes/payroll/salary_component"));
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
