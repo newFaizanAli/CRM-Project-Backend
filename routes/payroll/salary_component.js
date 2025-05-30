@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { protect } = require("../../middleware/auth");
 const SalaryComponent = require("../../models/payroll/SalaryComponent");
+const { idCreator } = require("../../lib/function");
 
 // Get all salary component
 router.get("/", protect, async (req, res) => {
@@ -17,14 +18,22 @@ router.get("/", protect, async (req, res) => {
 // Create new salary component
 router.post("/", protect, async (req, res) => {
   try {
+    const comp_id = await idCreator({
+      model: SalaryComponent,
+      idStr: "SLCM",
+    });
+
     const salary_component = new SalaryComponent({
       ...req.body,
       createdBy: req.user.id,
+      ID: comp_id,
     });
 
     await salary_component.save();
 
-    const newSalaryComponent = await SalaryComponent.findById(salary_component._id);
+    const newSalaryComponent = await SalaryComponent.findById(
+      salary_component._id
+    );
 
     res.status(201).json(newSalaryComponent);
   } catch (error) {
@@ -45,7 +54,9 @@ router.put("/:id", protect, async (req, res) => {
     salary_component.updatedAt = Date.now();
     await salary_component.save();
 
-    const updatedSalaryComponent = await SalaryComponent.findById(salary_component._id);
+    const updatedSalaryComponent = await SalaryComponent.findById(
+      salary_component._id
+    );
 
     res.json(updatedSalaryComponent);
   } catch (error) {

@@ -83,6 +83,7 @@ app.use("/api/tasks", require("./routes/tasks"));
 // payroll
 
 app.use("/api/salary-components", require("./routes/payroll/salary_component"));
+app.use("/api/salary-structures", require("./routes/payroll/salary_structure"));
 
 
 // Error handling middleware
