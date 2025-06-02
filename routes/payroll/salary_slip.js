@@ -2,17 +2,18 @@ const express = require("express");
 const router = express.Router();
 const { protect } = require("../../middleware/auth");
 const SalarySlip = require("../../models/payroll/SalarySlip");
+const { idCreator } = require("../../lib/function");
 
 router.get("/", protect, async (req, res) => {
   try {
     const salary_slips = await SalarySlip.find()
       .populate({
         path: "components.component",
-        select: "_id type value",
+        select: "_id name type value amountType",
       })
       .populate({
-        path: "employee",
-        select: "_id name",
+        path: "salaryStructure",
+        select: "_id ID",
       });
 
     res.json(salary_slips);
@@ -25,9 +26,16 @@ router.get("/", protect, async (req, res) => {
 
 router.post("/", protect, async (req, res) => {
   try {
+
+     const comp_id = await idCreator({
+      model: SalarySlip,
+      idStr: "SALSLP",
+    });
+
     const salary_slip = new SalarySlip({
       ...req.body,
       createdBy: req.user.id,
+      ID: comp_id
     });
 
     await salary_slip.save();
@@ -35,11 +43,11 @@ router.post("/", protect, async (req, res) => {
     const newSalarySlip = await SalarySlip.findById(salary_slip._id)
       .populate({
         path: "components.component",
-        select: "_id type value",
+        select: "_id name type value amountType",
       })
-      .populate({
-        path: "employee",
-        select: "_id name",
+     .populate({
+        path: "salaryStructure",
+        select: "_id ID",
       });
 
     res.status(201).json(newSalarySlip);
@@ -63,11 +71,11 @@ router.put("/:id", protect, async (req, res) => {
     const updatedSalarySlip = await SalarySlip.findById(req.params.id)
       .populate({
         path: "components.component",
-        select: "_id type value",
+        select: "_id name type value amountType",
       })
-      .populate({
-        path: "employee",
-        select: "_id name",
+       .populate({
+        path: "salaryStructure",
+        select: "_id ID",
       });
 
     res.json(updatedSalarySlip);

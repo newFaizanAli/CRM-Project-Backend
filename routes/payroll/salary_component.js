@@ -20,7 +20,7 @@ router.post("/", protect, async (req, res) => {
   try {
     const comp_id = await idCreator({
       model: SalaryComponent,
-      idStr: "SLCM",
+      idStr: "SALCMP",
     });
 
     const salary_component = new SalaryComponent({

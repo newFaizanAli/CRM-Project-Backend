@@ -2,9 +2,8 @@ const mongoose = require("mongoose");
 
 const salarySlipSchema = new mongoose.Schema(
   {
-    employee: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "employees",
+    ID: {
+      type: String,
       required: true,
     },
     salaryStructure: {
@@ -12,7 +11,6 @@ const salarySlipSchema = new mongoose.Schema(
       ref: "SalaryStructure",
       required: true,
     },
-    // baseSalary: Number, -> salary structure
     month: String,
     year: Number,
     components: [
@@ -24,9 +22,6 @@ const salarySlipSchema = new mongoose.Schema(
         },
       },
     ],
-    // totalEarnings: Number,
-    // totalDeductions: Number,
-    // netPay: Number,
     status: {
       type: String,
       enum: ["Draft", "Final"],

@@ -74,7 +74,6 @@ app.use("/api/contacts", require("./routes/contacts"));
 app.use("/api/attendances", require("./routes/hr/attendance"));
 app.use("/api/leaves", require("./routes/hr/leaves"));
 
-
 // project
 
 app.use("/api/projects", require("./routes/projects"));
@@ -84,6 +83,15 @@ app.use("/api/tasks", require("./routes/tasks"));
 
 app.use("/api/salary-components", require("./routes/payroll/salary_component"));
 app.use("/api/salary-structures", require("./routes/payroll/salary_structure"));
+app.use("/api/salary-slips", require("./routes/payroll/salary_slip"));
+
+
+// asset
+
+app.use("/api/asset-categories", require("./routes/asset/asset_category"));
+app.use("/api/asset-locations", require("./routes/asset/asset_location"));
+app.use("/api/assets", require("./routes/asset/asset"));
+
 
 
 // Error handling middleware

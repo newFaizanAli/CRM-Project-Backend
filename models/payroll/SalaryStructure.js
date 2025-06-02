@@ -6,6 +6,10 @@ const salaryStructureSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    ID: {
+      type: String,
+      required: true,
+    },
     employee: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "employees",
