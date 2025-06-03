@@ -7,7 +7,17 @@ const { idCreator } = require("../../lib/function");
 // ✅ Get all assets
 router.get("/", protect, async (req, res) => {
   try {
-    const assets = await Asset.find();
+    const assets = await Asset.find().populate({
+        path: "category",
+        select: "_id ID name",
+      }).populate({
+        path: "location",
+        select: "_id ID name",
+      }).populate({
+        path: "vendor",
+        select: "_id ID name",
+      });
+
     res.json(assets);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -30,7 +40,17 @@ router.post("/", protect, async (req, res) => {
 
     await asset.save();
 
-    const newAsset = await Asset.findById(asset._id);
+    const newAsset = await Asset.findById(asset._id).populate({
+        path: "category",
+        select: "_id ID name",
+      }).populate({
+        path: "location",
+        select: "_id ID name",
+      }).populate({
+        path: "vendor",
+        select: "_id ID name",
+      });
+
     res.status(201).json(newAsset);
   } catch (error) {
     console.log(error.message);
@@ -50,7 +70,17 @@ router.put("/:id", protect, async (req, res) => {
     asset.updatedAt = Date.now();
     await asset.save();
 
-    const updatedAsset = await Asset.findById(asset._id);
+    const updatedAsset = await Asset.findById(asset._id).populate({
+        path: "category",
+        select: "_id ID name",
+      }).populate({
+        path: "location",
+        select: "_id ID name",
+      }).populate({
+        path: "vendor",
+        select: "_id ID name",
+      });
+      
     res.json(updatedAsset);
   } catch (error) {
     res.status(400).json({ message: error.message });

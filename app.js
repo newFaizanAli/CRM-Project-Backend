@@ -92,6 +92,9 @@ app.use("/api/asset-categories", require("./routes/asset/asset_category"));
 app.use("/api/asset-locations", require("./routes/asset/asset_location"));
 app.use("/api/assets", require("./routes/asset/asset"));
 
+app.use("/api/maintainance_teams", require("./routes/asset/maintainance/maintainance_team"));
+app.use("/api/maintainance_requests", require("./routes/asset/maintainance/maintainance_request"));
+
 
 
 // Error handling middleware
