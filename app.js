@@ -94,6 +94,11 @@ app.use("/api/assets", require("./routes/asset/asset"));
 
 app.use("/api/maintainance_teams", require("./routes/asset/maintainance/maintainance_team"));
 app.use("/api/maintainance_requests", require("./routes/asset/maintainance/maintainance_request"));
+app.use("/api/maintenance_logs", require("./routes/asset/maintainance/maintainance_log"));
+
+// workstation
+
+app.use("/api/workstation-types", require("./routes/manufacturing/workstation_type"));
 
 
 
