@@ -18,20 +18,17 @@ router.get("/", protect, async (req, res) => {
 
 router.post("/", protect, async (req, res) => {
   try {
-    const type_id = await idCreator({
-      model: WorkstationType,
-      idStr: "WSTP",
-    });
-
-    const workstaion_type = new WorkstationType({
+    const workstaion_type =  new WorkstationType({
       ...req.body,
       createdBy: req.user.id,
-      ID: type_id,
     });
 
-    workstaion_type.save();
+    await workstaion_type.save();
 
-    const newWorkstationType = await WorkstationType.findById(workstaion_type._id);
+    const newWorkstationType = await WorkstationType.findById(
+      workstaion_type._id
+    );
+
 
     res.status(201).json(newWorkstationType);
   } catch (error) {
@@ -53,7 +50,9 @@ router.put("/:id", protect, async (req, res) => {
 
     await workstaion_type.save();
 
-    const updatedWorkstationType = await WorkstationType.findById(req.params.id);
+    const updatedWorkstationType = await WorkstationType.findById(
+      req.params.id
+    );
 
     res.json(updatedWorkstationType);
   } catch (error) {

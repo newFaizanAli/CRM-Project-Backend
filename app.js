@@ -99,8 +99,9 @@ app.use("/api/maintenance_logs", require("./routes/asset/maintainance/maintainan
 // workstation
 
 app.use("/api/workstation-types", require("./routes/manufacturing/workstation_type"));
-
-
+app.use("/api/workstations", require("./routes/manufacturing/workstations"));
+app.use("/api/operations", require("./routes/manufacturing/operations"));
+app.use("/api/manufacturing_items", require("./routes/manufacturing/manufacturing_items"));
 
 // Error handling middleware
 app.use((err, req, res, next) => {
