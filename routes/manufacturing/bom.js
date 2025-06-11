@@ -1,17 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const { protect } = require("../../middleware/auth");
-const ManufacturingItem = require("../../models/manufacturing/ManufacturingItems");
+const BOM = require("../../models/manufacturing/BOM");
 const { idCreator } = require("../../lib/function");
 
-// ✅ Get all items
+// ✅ Get all bills
 router.get("/", protect, async (req, res) => {
   try {
-
-    
-
-      
-    const items = await ManufacturingItem.find()
+    const bills = await BOM.find()
       .populate({
         path: "product",
         select: "_id name ID",
@@ -25,27 +21,29 @@ router.get("/", protect, async (req, res) => {
         select: "_id name timeInMinutes costPerHour rate ID",
       });
 
-    
-
-    res.json(items);
+    res.json(bills);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-// ✅ Create new item
+// ✅ Create new bom
 router.post("/", protect, async (req, res) => {
   try {
-    const item_id = await idCreator({
-      model: ManufacturingItem,
-      idStr: "MFIT",
+    const bom_id = await idCreator({
+      model: BOM,
+      idStr: "MBOM",
     });
 
-    const item = new ManufacturingItem({
+    const bill = new BOM({
       ...req.body,
       createdBy: req.user.id,
-      ID: item_id,
-    })
+      ID: bom_id,
+    });
+
+    await bill.save();
+
+    const newBill = await BOM.findById(bill._id)
       .populate({
         path: "product",
         select: "_id name ID",
@@ -59,32 +57,26 @@ router.post("/", protect, async (req, res) => {
         select: "_id name timeInMinutes costPerHour rate ID",
       });
 
-    await item.save();
-
-    const newItem = await ManufacturingItem.findById(item._id);
-
-    res.status(201).json(newItem);
+    res.status(201).json(newBill);
   } catch (error) {
     console.log(error.message);
     res.status(400).json({ message: error.message });
   }
 });
 
-// ✅ Update manufacturing_item
+// ✅ Update bill
 router.put("/:id", protect, async (req, res) => {
   try {
-    const manufacturing_item = await ManufacturingItem.findById(req.params.id);
-    if (!manufacturing_item) {
-      return res.status(404).json({ message: "manufacturing item not found" });
+    const bill = await BOM.findById(req.params.id);
+    if (!bill) {
+      return res.status(404).json({ message: "bill not found" });
     }
 
-    Object.assign(manufacturing_item, req.body);
-    manufacturing_item.updatedAt = Date.now();
-    await manufacturing_item.save();
+    Object.assign(bill, req.body);
+    bill.updatedAt = Date.now();
+    await bill.save();
 
-    const updatedManufacturingItem = await ManufacturingItem.findById(
-      manufacturing_item._id
-    )
+    const updatedBill = await BOM.findById(bill._id)
       .populate({
         path: "product",
         select: "_id name ID",
@@ -98,22 +90,22 @@ router.put("/:id", protect, async (req, res) => {
         select: "_id name timeInMinutes costPerHour rate ID",
       });
 
-    res.json(updatedManufacturingItem);
+    res.json(updatedBill);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
-// ✅ Delete item
+// ✅ Delete bill
 router.delete("/:id", protect, async (req, res) => {
   try {
-    const item = await ManufacturingItem.findById(req.params.id);
-    if (!item) {
-      return res.status(404).json({ message: "Manufacturing Item not found" });
+    const bill = await BOM.findById(req.params.id);
+    if (!bill) {
+      return res.status(404).json({ message: "bill not found" });
     }
 
-    await item.deleteOne();
-    res.json({ message: "Manufacturing item deleted" });
+    await bill.deleteOne();
+    res.json({ message: "bill deleted" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
